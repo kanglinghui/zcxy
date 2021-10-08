@@ -1,4 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import NProgress from "nprogress"; // progress bar
+import "nprogress/nprogress.css";
+import Layout from "@/Layout";
+import { getSession } from "../utils/auth";
+
 import Home from "../views/Home.vue";
 
 const routes = [
@@ -8,6 +13,117 @@ const routes = [
     component: Home,
   },
   {
+    path: "/i",
+    component: Layout,
+    children: [
+      {
+        path: "",
+        name: "Home",
+        component: () => import("@/views/Home"),
+      },
+      {
+        path: "admin",
+        name: "Admin",
+        meta: {
+          title: "管理员",
+        },
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../views/admin"),
+      },
+      {
+        path: "institutions",
+        name: "Institutions",
+        meta: {
+          title: "机构管理",
+        },
+        component: () => import("../views/institutions"),
+      },
+      //   {
+      //     path: "/institutionsEdit",
+      //     name: "InstitutionsEdit",
+      //     meta: {
+      //       title: "机构管理 - 编辑",
+      //     },
+      //     component: () => import("../views/institutions/detail.vue"),
+      //   },
+      {
+        path: "monitoring",
+        name: "Monitoring",
+        meta: {
+          title: "监控",
+        },
+        component: () => import("../views/monitoring"),
+      },
+      {
+        path: "log",
+        name: "Log",
+        meta: {
+          title: "操作日志",
+        },
+        component: () => import("../views/log"),
+      },
+    ],
+  },
+  {
+    path: "/",
+    redirect: "/i",
+  },
+  //   {
+  //     path: "/admin",
+  //     name: "Admin",
+  //     meta: {
+  //       title: "管理员",
+  //     },
+  //     component: () => import(/* webpackChunkName: "about" */ "../views/admin"),
+  //   },
+  //   {
+  //     path: "/institutions",
+  //     name: "Institutions",
+  //     meta: {
+  //       title: "机构管理",
+  //     },
+  //     component: () => import("../views/institutions"),
+  //   },
+  {
+    path: "/institutionsEdit",
+    name: "InstitutionsEdit",
+    meta: {
+      title: "机构管理 - 编辑",
+    },
+    component: () => import("../views/institutions/detail.vue"),
+  },
+  {
+    path: "/401",
+    name: "NoPermission",
+    component: () => import("@/views/error-page/401"),
+  },
+  {
+    path: "/404",
+    name: "NotFound",
+    component: () => import("@/views/error-page/404"),
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/login"),
+  },
+  //   {
+  //     path: "/monitoring",
+  //     name: "Monitoring",
+  //     meta: {
+  //       title: "监控",
+  //     },
+  //     component: () => import("../views/monitoring"),
+  //   },
+  //   {
+  //     path: "/log",
+  //     name: "Log",
+  //     meta: {
+  //       title: "操作日志",
+  //     },
+  //     component: () => import("../views/log"),
+  //   },
+  {
     path: "/about",
     name: "About",
     // route level code-splitting
@@ -16,11 +132,30 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
+  { path: "/:pathMatch(.*)*", redirect: { name: "NotFound" } },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-
+// to, from, next
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  if (to.path === "/login") {
+    next();
+    return;
+  }
+  if (getSession("token")) {
+    next();
+  } else {
+    next({ path: "/login", replace: true });
+  }
+});
+router.afterEach((to) => {
+  document.title = to.meta.title
+    ? "自诚星云系统 - " + to.meta.title
+    : "自诚星云系统";
+  NProgress.done();
+});
 export default router;
