@@ -23,40 +23,14 @@
         <i class="el-icon-s-shop"></i>
         <template #title>机构管理</template></el-menu-item
       >
-      <el-menu-item index="/i/monitoring">
+      <el-menu-item index="/i/monitoring" v-if="isAdmin">
         <i class="el-icon-video-camera-solid"></i>
         <template #title>监控</template>
       </el-menu-item>
-      <el-menu-item index="/i/log">
+      <el-menu-item index="/i/log" v-if="isAdmin">
         <i class="el-icon-tickets"></i>
         <template #title>操作日志</template>
       </el-menu-item>
-      <!-- <el-submenu index="1">
-        <template #title
-          ><i class="el-icon-s-tools"></i><span>管理员</span></template
-        >
-        <el-menu-item index="/admin">管理员管理</el-menu-item>
-      </el-submenu> -->
-      <!-- <el-submenu index="2">
-        <template #title
-          ><i class="el-icon-s-custom"></i><span>机构管理</span></template
-        >
-        <el-menu-item index="2"> 客户管理1.1 </el-menu-item>
-        <el-menu-item index="2"> 客户管理1.2 </el-menu-item>
-        <el-submenu index="1-4">
-          <template #title>选项4</template>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
-          <el-menu-item index="1-4-1">选项2</el-menu-item>
-        </el-submenu>
-      </el-submenu> -->
-      <!-- <el-menu-item index="3">
-        <i class="el-icon-user"></i>
-        <template #title>用户管理</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-coin"></i>
-        <template #title>账户管理</template>
-      </el-menu-item> -->
     </el-menu>
   </div>
 </template>
@@ -71,6 +45,9 @@ export default {
     const data = reactive({
       //   isCollapse: true,
     });
+    const isAdmin = computed(() => {
+      return store.state.isAdmin;
+    });
     const isCollapse = computed(() => {
       return !store.state.menuScal;
     });
@@ -81,6 +58,7 @@ export default {
       ...toRefs(data),
       isCollapse,
       active,
+      isAdmin,
     };
   },
 };

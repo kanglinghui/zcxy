@@ -7,7 +7,7 @@
     <DetailHeader @back="back">
       <h3>当前机构: {{ title }}</h3>
     </DetailHeader>
-    <div class="flex-sb pd">
+    <div class="flex-sb pd" v-if="isAdmin">
       <div>
         <el-select
           v-model="value"
@@ -41,7 +41,7 @@
         border
         style="width: 100%"
         @selection-change="handleSelectionChange"
-        height="calc(100vh - 170px)"
+        :height="isAdmin ? 'calc(100vh - 170px)' : 'calc(100vh - 127px)'"
       >
         <el-table-column type="selection" width="50" align="center">
         </el-table-column>
@@ -65,7 +65,10 @@
         <el-table-column label="登录权限" width="95" align="center">
           <template v-slot:default="scope">
             <div>
-              <span @click="edit(scope.row, 'login')" class="edit oper"
+              <span
+                @click="edit(scope.row, 'login')"
+                class="edit oper"
+                v-if="admin"
                 >编辑</span
               >
               <span class="freeze oper" @click="view(scope.row, 'login')"
@@ -77,7 +80,10 @@
         <el-table-column label="交易权限" width="95" align="center">
           <template v-slot:default="scope">
             <div>
-              <span @click="edit(scope.row, 'trading')" class="edit oper"
+              <span
+                @click="edit(scope.row, 'trading')"
+                class="edit oper"
+                v-if="admin"
                 >编辑</span
               >
               <span class="freeze oper" @click="view(scope.row, 'trading')"
@@ -89,7 +95,10 @@
         <el-table-column label="风控" width="95" align="center">
           <template v-slot:default="scope">
             <div>
-              <span @click="edit(scope.row, 'risk')" class="edit oper"
+              <span
+                @click="edit(scope.row, 'risk')"
+                class="edit oper"
+                v-if="admin"
                 >编辑</span
               >
               <span class="freeze oper" @click="view(scope.row, 'risk')"
@@ -109,23 +118,26 @@
         </el-pagination>
       </div>
     </div>
-    <AddAccountUI v-model:dialog="addShow" />
+    <AddAccountUI v-model:dialog="addShow" :isAdmin="isAdmin" />
     <LoginPermUI
       v-model:dialog="loginPerm"
       :title="permTitle"
       :showType="type"
+      :isAdmin="isAdmin"
     />
     <RiskPermUI v-model:dialog="riskPerm" :title="permTitle" :showType="type" />
     <TradingPermUI
       v-model:dialog="tradingPerm"
       :title="permTitle"
       :showType="type"
+      :isAdmin="isAdmin"
     />
   </div>
 </template>
 <script>
 import { reactive, toRefs, onActivated, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex";
 import AddAccountUI from "./components/AddAccount.vue";
 import LoginPermUI from "./components/LoginPerm.vue";
 import RiskPermUI from "./components/RiskPerm.vue";
@@ -143,8 +155,12 @@ export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
+    const store = useStore();
     const title = computed(() => {
       return route.params.name;
+    });
+    const isAdmin = computed(() => {
+      return store.state.isAdmin;
     });
     const data = reactive({
       addShow: false,
@@ -282,6 +298,7 @@ export default {
       back, // 返回
       handleSelectionChange, // 表格选中
       title, //顶部机构名称
+      isAdmin, //是否是超级管理员
     };
   },
 };

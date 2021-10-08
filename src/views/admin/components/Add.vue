@@ -14,6 +14,7 @@
         label-width="140px"
         class="demo-ruleForm"
         :status-icon="true"
+        :disabled="!isAdmin"
       >
         <el-form-item label="管理员名称" prop="name">
           <el-input
@@ -47,16 +48,31 @@
             placeholder="请输入备注信息"
           ></el-input>
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item :disabled="false">
           <div class="flex-sb">
             <div></div>
             <div>
-              <el-button @click="cancel">取 消</el-button>
-              <el-button type="primary" @click="submit">提 交</el-button>
+              <el-button @click="cancel">{{
+                isAdmin ? "取 消" : "关 闭"
+              }}</el-button>
+              <el-button type="primary" @click="submit" v-if="isAdmin"
+                >提 交</el-button
+              >
             </div>
           </div>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
+      <div class="flex-sb">
+        <div></div>
+        <div>
+          <el-button @click="cancel">{{
+            isAdmin ? "取 消" : "关 闭"
+          }}</el-button>
+          <el-button type="primary" @click="submit" v-if="isAdmin"
+            >提 交</el-button
+          >
+        </div>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -73,6 +89,10 @@ export default {
       default: "修改",
     },
     permissions: {
+      type: Boolean,
+      default: false,
+    },
+    isAdmin: {
       type: Boolean,
       default: false,
     },

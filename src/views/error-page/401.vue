@@ -13,7 +13,7 @@
         <img
           :src="errGif"
           width="313"
-          height="428"
+          height="350"
           alt="Girl has dropped her ice cream."
         />
       </el-col>
@@ -44,10 +44,10 @@ export default {
 
 <style lang="scss" scoped>
 .errPage-container {
-  width: 800px;
+  width: 400px;
   max-width: 100%;
   margin: 0 auto;
-  padding-top: 160px;
+  //   padding-top: 160px;
   .pan-back-btn {
     background: #008489;
     color: #fff;
@@ -60,7 +60,8 @@ export default {
   .pan-img {
     display: block;
     margin: 0 auto;
-    width: 100%;
+    // width: 100%;
+    height: 300px;
   }
   .text-jumbo {
     font-size: 60px;

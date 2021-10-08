@@ -19,7 +19,7 @@
         label="操作"
         align="center"
         width="80"
-        v-if="showType === 'toEdit'"
+        v-if="showType === 'toEdit' && isAdmin"
       >
         <template #default="scope">
           <span class="oper delete" @click="del(scope.row)">删除</span>
@@ -28,12 +28,8 @@
     </el-table>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancel">{{
-          showType === "toEdit" ? "取 消" : "关 闭"
-        }}</el-button>
-        <el-button type="primary" v-if="showType === 'toEdit'" @click="save"
-          >保 存</el-button
-        >
+        <el-button @click="cancel">{{ status ? "取 消" : "关 闭" }}</el-button>
+        <el-button type="primary" v-if="status" @click="save">保 存</el-button>
       </span>
     </template>
   </el-dialog>
@@ -54,6 +50,10 @@ export default {
       type: String,
       default: "toView",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
     const dialogVisible = computed({
@@ -63,6 +63,17 @@ export default {
       set(val) {
         emit("update:dialog", val);
       },
+    });
+    const status = computed(() => {
+      let state;
+      if (props.isAdmin && props.showType === "toView") {
+        state = false;
+      } else if (props.isAdmin && props.showType !== "toView") {
+        state = true;
+      } else if (!props.isAdmin) {
+        state = false;
+      }
+      return state;
     });
     const data = reactive({
       tableData: [{ ip: "127.0.0.1", mac: "xxxx.xxx" }],
@@ -82,6 +93,7 @@ export default {
       cancel,
       save,
       del,
+      status,
     };
   },
 };

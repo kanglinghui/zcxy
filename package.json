@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "echarts": "^5.2.1",
+    "compression-webpack-plugin": "^5.0.1",
     "element-plus": "^1.0.2-beta.71",
     "nprogress": "^0.2.0",
     "vue": "^3.0.0",

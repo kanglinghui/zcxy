@@ -5,7 +5,14 @@ import Layout from "@/Layout";
 import { getSession } from "../utils/auth";
 
 import Home from "../views/Home.vue";
-
+// get routes from modules
+const modulesFiles = require.context("./modules", true, /\.js$/);
+// router for layout
+const moduleRoutes = modulesFiles.keys().reduce((moduleRoutes, modulePath) => {
+  const value = modulesFiles(modulePath);
+  return [...moduleRoutes, ...value.default];
+}, []);
+const permissionsList = moduleRoutes.map((item) => item.name);
 const routes = [
   {
     path: "/",
@@ -38,6 +45,7 @@ const routes = [
         },
         component: () => import("../views/institutions"),
       },
+      ...moduleRoutes,
       //   {
       //     path: "/institutionsEdit",
       //     name: "InstitutionsEdit",
@@ -46,22 +54,22 @@ const routes = [
       //     },
       //     component: () => import("../views/institutions/detail.vue"),
       //   },
-      {
-        path: "monitoring",
-        name: "Monitoring",
-        meta: {
-          title: "监控",
-        },
-        component: () => import("../views/monitoring"),
-      },
-      {
-        path: "log",
-        name: "Log",
-        meta: {
-          title: "操作日志",
-        },
-        component: () => import("../views/log"),
-      },
+      //   {
+      //     path: "monitoring",
+      //     name: "Monitoring",
+      //     meta: {
+      //       title: "监控",
+      //     },
+      //     component: () => import("../views/monitoring"),
+      //   },
+      //   {
+      //     path: "log",
+      //     name: "Log",
+      //     meta: {
+      //       title: "操作日志",
+      //     },
+      //     component: () => import("../views/log"),
+      //   },
     ],
   },
   {
@@ -147,7 +155,13 @@ router.beforeEach((to, from, next) => {
     return;
   }
   if (getSession("token")) {
-    next();
+    if (getSession("token") === "admin") {
+      next();
+    } else if (permissionsList.includes(to.name)) {
+      next("/401");
+    } else {
+      next();
+    }
   } else {
     next({ path: "/login", replace: true });
   }
@@ -158,4 +172,5 @@ router.afterEach((to) => {
     : "自诚星云系统";
   NProgress.done();
 });
+export { moduleRoutes };
 export default router;

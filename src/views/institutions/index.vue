@@ -1,7 +1,7 @@
 <template>
   <div class="institutions">
     <el-card>
-      <div class="flex-sb">
+      <div class="flex-sb" v-if="isAdmin">
         <div>
           <el-select
             v-model="value"
@@ -25,7 +25,19 @@
           <el-button icon="el-icon-plus" type="primary" @click="add"
             >添加机构</el-button
           >
-          <el-button icon="el-icon-question" type="primary">机构说明</el-button>
+          <el-popover
+            placement="bottom-start"
+            title=""
+            :width="260"
+            trigger="hover"
+            content="展示机构列表，一个机构下包含多个账户，超管可以增删改查，普管只能进行信息的查看"
+          >
+            <template #reference>
+              <el-button icon="el-icon-question" type="primary"
+                >机构说明</el-button
+              >
+            </template>
+          </el-popover>
         </div>
       </div>
       <el-table
@@ -35,7 +47,7 @@
         ref="multipleTable"
         style="width: 100%"
         @selection-change="handleSelectionChange"
-        height="calc(100vh - 200px)"
+        :height="isAdmin ? 'calc(100vh - 200px)' : 'calc(100vh - 157px)'"
       >
         <el-table-column type="selection" width="50" align="center">
         </el-table-column>
@@ -51,10 +63,18 @@
         </el-table-column>
         <el-table-column label="操作" width="95" align="center">
           <template v-slot:default="scope">
-            <div>
+            <div v-if="isAdmin">
               <span @click="edit(scope.row)" class="edit oper">修改</span>
               <span class="delete oper" @click="del(scope.row, scope.$index)"
                 >删除</span
+              >
+            </div>
+            <div v-else>
+              <span
+                @click="edit(scope.row)"
+                class="edit oper"
+                style="margin-right: 0px"
+                >查看</span
               >
             </div>
           </template>
@@ -74,8 +94,9 @@
   </div>
 </template>
 <script>
-import { reactive, toRefs, onActivated, ref } from "vue";
+import { reactive, toRefs, onActivated, ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex";
 import AddUI from "./components/Add.vue";
 export default {
   name: "Institutions",
@@ -86,6 +107,10 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const multipleTable = ref(null);
+    const store = useStore();
+    const isAdmin = computed(() => {
+      return store.state.isAdmin;
+    });
     const data = reactive({
       addShow: false,
       tableData: [
@@ -134,6 +159,7 @@ export default {
       add,
       handleSelectionChange,
       multipleTable,
+      isAdmin,
     };
   },
 };

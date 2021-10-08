@@ -96,6 +96,7 @@
 <script>
 import { reactive, toRefs, ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import { setSession, setStorge, getStorge } from "@/utils/auth.js";
 export default {
   name: "Login",
@@ -103,8 +104,8 @@ export default {
     const validateAccount = (rule, value, callback) => {
       // do valid here
       // if invalid, callback(new Error())
-      if (value.length < 6) {
-        return callback(new Error("请输入不小于6位账号"));
+      if (value.length < 5) {
+        return callback(new Error("请输入不小于5位账号"));
       }
       callback();
     };
@@ -120,6 +121,7 @@ export default {
     const account = ref(null);
     const password = ref(null);
     const router = useRouter();
+    const store = useStore();
     const data = reactive({
       formData: {
         account: "",
@@ -161,7 +163,12 @@ export default {
           if (data.check) {
             setStorge("user", data.formData);
           }
-          setSession("token", "key123");
+          setSession("token", data.formData.account);
+          store.commit(
+            "SET_IS_ADMIN",
+            data.formData.account === "admin" ? true : false
+          );
+          store.commit("SET_USER_NAME", data.formData.account);
           router.push("/i/admin");
         }
       });

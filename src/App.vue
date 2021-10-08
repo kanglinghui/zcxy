@@ -1,21 +1,29 @@
 <template>
   <div>
     <router-view v-slot="{ Component }">
-      <transition name="fade-transform-s">
-        <keep-alive exclude="Login">
-          <component :is="Component" />
-        </keep-alive>
-      </transition>
+      <!-- <transition name="fade-transform-s"> -->
+      <keep-alive exclude="Login">
+        <component :is="Component" />
+      </keep-alive>
+      <!-- </transition> -->
     </router-view>
   </div>
 </template>
 <script>
 import * as echarts from "echarts";
 import { provide } from "vue";
+import { useStore } from "vuex";
+import { getSession } from "./utils/auth";
 
 export default {
   name: "App",
   setup() {
+    const store = useStore();
+    const token = getSession("token");
+    if (token) {
+      store.commit("SET_IS_ADMIN", token === "admin" ? true : false);
+      store.commit("SET_USER_NAME", token);
+    }
     provide("ec", echarts); //provide
   },
 };

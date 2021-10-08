@@ -10,7 +10,7 @@
     <el-form
       :model="form"
       :rules="rules"
-      :disabled="showType === 'toView'"
+      :disabled="!status"
       ref="ruleForm"
       label-width="140px"
       class="demo-ruleForm"
@@ -43,12 +43,8 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancel">{{
-          showType === "toEdit" ? "取 消" : "关 闭"
-        }}</el-button>
-        <el-button type="primary" v-if="showType === 'toEdit'" @click="save"
-          >保 存</el-button
-        >
+        <el-button @click="cancel">{{ status ? "取 消" : "关 闭" }}</el-button>
+        <el-button type="primary" v-if="status" @click="save">保 存</el-button>
       </span>
     </template>
   </el-dialog>
@@ -69,6 +65,10 @@ export default {
       type: String,
       default: "toView",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
     const ruleForm = ref(null);
@@ -79,6 +79,17 @@ export default {
       set(val) {
         emit("update:dialog", val);
       },
+    });
+    const status = computed(() => {
+      let state;
+      if (props.isAdmin && props.showType === "toView") {
+        state = false;
+      } else if (props.isAdmin && props.showType !== "toView") {
+        state = true;
+      } else if (!props.isAdmin) {
+        state = false;
+      }
+      return state;
     });
     const data = reactive({
       form: {
@@ -108,6 +119,7 @@ export default {
       save,
       ruleForm,
       close,
+      status,
     };
   },
 };

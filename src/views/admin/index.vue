@@ -1,7 +1,7 @@
 <template>
   <div class="admin">
     <el-card>
-      <div class="flex-spea">
+      <div class="flex-spea" v-if="isAdmin">
         <div>
           <el-select
             v-model="value"
@@ -29,9 +29,19 @@
           <el-button icon="el-icon-plus" type="primary" @click="add"
             >添加管理员</el-button
           >
-          <el-button icon="el-icon-question" type="primary"
-            >管理员权限说明</el-button
+          <el-popover
+            placement="bottom-start"
+            title=""
+            :width="260"
+            trigger="hover"
+            content="管理员界面，此界面可以对管理员进行添加，管理员权限分为两种，超级管理员：可以对管理端的所有信息进行增删改查，普通管理员只能对用户信息进行查看。普通管理员需要超级管理员授权，才可成为超级管理员"
           >
+            <template #reference>
+              <el-button icon="el-icon-question" type="primary"
+                >管理员权限说明</el-button
+              >
+            </template>
+          </el-popover>
         </div>
       </div>
       <el-table
@@ -41,7 +51,7 @@
         border
         style="width: 100%"
         @selection-change="handleSelectionChange"
-        height="calc(100vh - 200px)"
+        :height="isAdmin ? 'calc(100vh - 200px)' : 'calc(100vh - 157px)'"
       >
         <el-table-column type="selection" width="50" align="center">
         </el-table-column>
@@ -58,14 +68,32 @@
         <el-table-column label="操作" width="185" align="center">
           <template v-slot:default="scope">
             <div v-if="scope.row.disabled">
-              <span @click="edit(scope.$index)" class="edit oper">修改</span>
-              <span class="delete oper" @click="del(scope.row, scope.$index)"
+              <span @click="edit(scope.$index)" class="edit oper" v-if="isAdmin"
+                >修改</span
+              >
+              <span
+                @click="edit(scope.$index)"
+                style="margin-right: 0px"
+                class="edit oper"
+                v-else
+                >查看</span
+              >
+              <span
+                class="delete oper"
+                @click="del(scope.row, scope.$index)"
+                v-if="isAdmin"
                 >删除</span
               >
-              <span class="freeze oper" @click="del(scope.row, scope.$index)"
+              <span
+                class="freeze oper"
+                @click="del(scope.row, scope.$index)"
+                v-if="isAdmin"
                 >冻结</span
               >
-              <span class="start oper" @click="del(scope.row, scope.$index)"
+              <span
+                class="start oper"
+                @click="del(scope.row, scope.$index)"
+                v-if="isAdmin"
                 >启用</span
               >
             </div>
@@ -88,11 +116,17 @@
         </el-pagination>
       </div>
     </el-card>
-    <AddUI v-model:dialog="addShow" :title="title" :permissions="permissions" />
+    <AddUI
+      v-model:dialog="addShow"
+      :title="title"
+      :permissions="permissions"
+      :isAdmin="isAdmin"
+    />
   </div>
 </template>
 <script>
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, computed } from "vue";
+import { useStore } from "vuex";
 import { ElMessageBox } from "element-plus";
 import { $msg } from "@/utils/message.js";
 import AddUI from "./components/Add.vue";
@@ -102,6 +136,10 @@ export default {
     AddUI,
   },
   setup() {
+    const store = useStore();
+    const isAdmin = computed(() => {
+      return store.state.isAdmin;
+    });
     const data = reactive({
       addShow: false,
       tableData: [
@@ -118,10 +156,7 @@ export default {
       ],
       rowPermissions: undefined,
       loading: false,
-      options: [
-        { label: "删除", value: 1 },
-        { label: "冻结", value: 2 },
-      ],
+      options: [{ label: "删除", value: 1 }],
       value: "",
       title: "",
       permissions: false,
@@ -146,7 +181,7 @@ export default {
       data.permissions = false;
     };
     const del = (row, index) => {
-      ElMessageBox.confirm(`此操作将移除《${row.name}》, 是否继续?`, "提示", {
+      ElMessageBox.confirm(`此操作将删除 <${row.name}> ，是否继续?`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -155,7 +190,7 @@ export default {
           data.tableData.splice(index, 1);
           $msg({
             type: "success",
-            msg: "移除成功!",
+            msg: "删除成功!",
           });
         })
         .catch(() => {});
@@ -184,6 +219,7 @@ export default {
       cancel, //表格取消
       add, //新建
       handleSelectionChange, //表格选中
+      isAdmin, //是否是超级管理员
     };
   },
 };

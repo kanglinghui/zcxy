@@ -13,7 +13,7 @@
     <div class="user">
       <el-dropdown>
         <span class="el-dropdown-link">
-          <b class="username">admin</b
+          <b class="username">{{ name }}</b
           ><i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <template #dropdown>
@@ -30,7 +30,7 @@
             >
             <el-dropdown-item divided
               ><span class="default"
-                ><i class="el-icon-user-solid"></i>admin</span
+                ><i class="el-icon-user-solid"></i>{{ name }}</span
               ></el-dropdown-item
             >
           </el-dropdown-menu>
@@ -50,6 +50,9 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const name = computed(() => {
+      return store.state.username;
+    });
     const data = reactive({
       icon: "el-icon-s-fold",
       show: true,
@@ -83,6 +86,7 @@ export default {
       checkpass,
       logout,
       title,
+      name,
     };
   },
 };
@@ -118,7 +122,7 @@ export default {
       transition: 0.5s;
       font-size: 16px;
       &:hover {
-        color: #409eff;
+        color: #314e75;
       }
     }
   }
@@ -127,12 +131,12 @@ export default {
     .el-dropdown-link {
       cursor: pointer;
       .username {
-        color: #000;
+        color: #666;
       }
       &:hover {
         b,
         i {
-          color: #409eff;
+          color: #314e75;
         }
       }
     }
