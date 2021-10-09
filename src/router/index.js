@@ -74,7 +74,7 @@ const routes = [
   },
   {
     path: "/",
-    redirect: "/i",
+    redirect: "/i/admin",
   },
   //   {
   //     path: "/admin",
