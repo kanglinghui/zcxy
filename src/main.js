@@ -46,6 +46,7 @@ import locale from "element-plus/lib/locale/lang/zh-cn";
 import "./assets/styles/common.css";
 import "./assets/styles/common.scss";
 import VueParticles from "vue-particles";
+import card from "./components/card";
 
 // import "element-plus/packages/theme-chalk/src/base.scss";
 
@@ -90,7 +91,7 @@ const components = [
   ElLink,
   ElScrollbar,
 ];
-
+app.component("card-box", card);
 app.config.globalProperties.$ELEMENT = { locale, size: "mini" };
 components.forEach((component) => {
   app.use(component);

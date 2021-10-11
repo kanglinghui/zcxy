@@ -1,6 +1,6 @@
 <template>
   <div class="admin">
-    <el-card>
+    <card-box>
       <div class="flex-spea" v-if="isAdmin">
         <div>
           <el-select
@@ -115,7 +115,7 @@
         >
         </el-pagination>
       </div>
-    </el-card>
+    </card-box>
     <AddUI
       v-model:dialog="addShow"
       :title="title"
@@ -160,12 +160,13 @@ export default {
       value: "",
       title: "",
       permissions: false,
+      checkedList: [],
     });
     data.tableData.forEach((item) => {
       item.disabled = true;
     });
-    const handleSelectionChange = (row) => {
-      console.log(row);
+    const handleSelectionChange = (list) => {
+      data.checkedList = list;
     };
     const add = () => {
       data.addShow = true;
@@ -196,14 +197,37 @@ export default {
         .catch(() => {});
     };
     const sub = () => {
-      data.loading = true;
-      setTimeout(() => {
+      if (!data.value) {
         $msg({
-          type: "success",
-          msg: "提交成功",
+          msg: "请先选择操作类型！",
         });
-        data.loading = false;
-      }, 2000);
+        return;
+      }
+      if (data.checkedList.length === 0) {
+        $msg({
+          msg: "请先勾选需要操作项！",
+        });
+        return;
+      }
+      ElMessageBox.confirm(`此操作将删除选中项 ，是否继续?`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          data.loading = true;
+          setTimeout(() => {
+            $msg({
+              type: "success",
+              msg: "删除成功!",
+            });
+            data.loading = false;
+          }, 2000);
+        })
+        .catch(() => {
+          data.loading = false;
+        });
+
       //   console.log(row, index);
       //   data.tableData[index].disabled = true;
     };

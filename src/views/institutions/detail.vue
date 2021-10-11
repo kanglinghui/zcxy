@@ -68,7 +68,7 @@
               <span
                 @click="edit(scope.row, 'login')"
                 class="edit oper"
-                v-if="admin"
+                v-if="isAdmin"
                 >编辑</span
               >
               <span class="freeze oper" @click="view(scope.row, 'login')"
@@ -83,7 +83,7 @@
               <span
                 @click="edit(scope.row, 'trading')"
                 class="edit oper"
-                v-if="admin"
+                v-if="isAdmin"
                 >编辑</span
               >
               <span class="freeze oper" @click="view(scope.row, 'trading')"
@@ -98,7 +98,7 @@
               <span
                 @click="edit(scope.row, 'risk')"
                 class="edit oper"
-                v-if="admin"
+                v-if="isAdmin"
                 >编辑</span
               >
               <span class="freeze oper" @click="view(scope.row, 'risk')"
@@ -118,7 +118,7 @@
         </el-pagination>
       </div>
     </div>
-    <AddAccountUI v-model:dialog="addShow" :isAdmin="isAdmin" />
+    <AddAccountUI v-model:dialog="addShow" />
     <LoginPermUI
       v-model:dialog="loginPerm"
       :title="permTitle"
@@ -156,15 +156,13 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
-    const title = computed(() => {
-      return route.params.name;
-    });
     const isAdmin = computed(() => {
       return store.state.isAdmin;
     });
     const data = reactive({
       addShow: false,
       detailId: null,
+      title: "admin" + (route.params.id - 1),
       tableData: [
         { name: "admin", password: "123456", permissions: true },
         { name: "admin1", password: "123456", permissions: true },
@@ -190,8 +188,10 @@ export default {
       if (data.detailId === route.params.id) {
         return;
       }
+      data.title = "admin" + (route.params.id - 1);
+      data.detailId = route.params.id;
       data.value = "";
-      (data.tableData = [
+      data.tableData = [
         {
           name: "admin" + parseInt(Math.random() * 10),
           password: "123456",
@@ -242,8 +242,7 @@ export default {
           password: "123456",
           permissions: true,
         },
-      ]),
-        console.log(route.params.id, "params");
+      ];
     });
     data.detailId = route.params.id;
     const add = () => {
@@ -297,7 +296,7 @@ export default {
       del, //提交
       back, // 返回
       handleSelectionChange, // 表格选中
-      title, //顶部机构名称
+      //   title, //顶部机构名称
       isAdmin, //是否是超级管理员
     };
   },

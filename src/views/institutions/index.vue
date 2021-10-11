@@ -1,6 +1,6 @@
 <template>
   <div class="institutions">
-    <el-card>
+    <card-box>
       <div class="flex-sb" v-if="isAdmin">
         <div>
           <el-select
@@ -17,7 +17,11 @@
             >
             </el-option>
           </el-select>
-          <el-button icon="el-icon-check" type="primary" @click="add"
+          <el-button
+            icon="el-icon-check"
+            type="primary"
+            :loading="loading"
+            @click="sub"
             >提交</el-button
           >
         </div>
@@ -89,7 +93,7 @@
         >
         </el-pagination>
       </div>
-    </el-card>
+    </card-box>
     <AddUI v-model:dialog="addShow" />
   </div>
 </template>
@@ -97,6 +101,8 @@
 import { reactive, toRefs, onActivated, ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
+import { ElMessageBox } from "element-plus";
+import { $msg } from "@/utils/message.js";
 import AddUI from "./components/Add.vue";
 export default {
   name: "Institutions",
@@ -113,8 +119,9 @@ export default {
     });
     const data = reactive({
       addShow: false,
+      loading: false,
       tableData: [
-        { name: "admin", password: "123456", permissions: true, id: "1" },
+        { name: "admin0", password: "123456", permissions: true, id: "1" },
         { name: "admin1", password: "123456", permissions: true, id: "2" },
         { name: "admin2", password: "123456", permissions: true, id: "3" },
         { name: "admin3", password: "123456", permissions: false, id: "4" },
@@ -127,9 +134,9 @@ export default {
       ],
       options: [{ label: "删除", value: 1 }],
       value: "",
+      checkedList: [],
     });
     onActivated(() => {
-      console.log(route, 123);
       if (route.query.type !== "back") {
         data.value = "";
         multipleTable.value.clearSelection();
@@ -140,10 +147,7 @@ export default {
     };
     const edit = (row) => {
       console.log(row);
-      router.push({
-        name: "InstitutionsEdit",
-        params: { id: row.id, name: row.name },
-      });
+      router.push(`/institutionsEdit/${row.id}`);
       //   window.open("#/institutionsEdit");
     };
     const del = (row, idx) => {
@@ -151,6 +155,44 @@ export default {
     };
     const handleSelectionChange = (list) => {
       console.log(list);
+      data.checkedList = list;
+    };
+    const sub = () => {
+      //提交
+      if (!data.value) {
+        $msg({
+          msg: "请先选择操作类型！",
+        });
+        return;
+      }
+      if (data.checkedList.length === 0) {
+        $msg({
+          msg: "请先勾选需要操作项！",
+        });
+        return;
+      }
+
+      ElMessageBox.confirm(`此操作将删除选中项 ，是否继续?`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          data.loading = true;
+          setTimeout(() => {
+            $msg({
+              type: "success",
+              msg: "删除成功!",
+            });
+            data.loading = false;
+          }, 2000);
+        })
+        .catch(() => {
+          data.loading = false;
+        });
+
+      //   console.log(row, index);
+      //   data.tableData[index].disabled = true;
     };
     return {
       ...toRefs(data),
@@ -160,6 +202,7 @@ export default {
       handleSelectionChange,
       multipleTable,
       isAdmin,
+      sub,
     };
   },
 };

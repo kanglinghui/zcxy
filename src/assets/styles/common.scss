@@ -90,6 +90,10 @@
     padding: 5px;
     border-radius: 1px;
     cursor: pointer;
+    text-decoration:underline;
+    &:hover {
+        text-decoration:none;
+    }
   }
   .edit {
     color: var(--color-theme);

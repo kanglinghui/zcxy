@@ -13,26 +13,26 @@
     <div class="user">
       <el-dropdown>
         <span class="el-dropdown-link">
-          <b class="username">{{ name }}</b
+          <b class="username"><i class="el-icon-user-solid"></i> {{ name }}</b
           ><i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="checkpass"
+            <!-- <el-dropdown-item @click="checkpass"
               ><span
                 ><i class="el-icon-key"></i>修改密码</span
               ></el-dropdown-item
-            >
+            > -->
             <el-dropdown-item @click="logout"
               ><span
-                ><i class="el-icon-setting"></i>退出登录</span
+                ><i class="el-icon-setting"></i>退出系统</span
               ></el-dropdown-item
             >
-            <el-dropdown-item divided
+            <!-- <el-dropdown-item divided
               ><span class="default"
                 ><i class="el-icon-user-solid"></i>{{ name }}</span
               ></el-dropdown-item
-            >
+            > -->
           </el-dropdown-menu>
         </template>
       </el-dropdown>

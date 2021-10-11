@@ -93,7 +93,7 @@ const routes = [
   //     component: () => import("../views/institutions"),
   //   },
   {
-    path: "/institutionsEdit",
+    path: "/institutionsEdit/:id",
     name: "InstitutionsEdit",
     meta: {
       title: "机构管理 - 编辑",

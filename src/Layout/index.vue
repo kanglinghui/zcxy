@@ -53,7 +53,7 @@ export default {
 .app-main {
   margin-top: 36px;
   padding: 15px;
-  background-color: #fafafa;
+  background-color: #f0f0f0;
   height: calc(100vh - 36px);
   box-sizing: border-box;
   transition: 0.6s;

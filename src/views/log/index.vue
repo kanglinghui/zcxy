@@ -1,6 +1,6 @@
 <template>
   <div class="log">
-    <el-card>
+    <card-box>
       <el-table
         :data="tableData"
         stripe
@@ -32,7 +32,7 @@
         >
         </el-pagination>
       </div>
-    </el-card>
+    </card-box>
   </div>
 </template>
 <script>
