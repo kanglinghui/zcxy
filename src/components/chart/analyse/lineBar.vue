@@ -26,7 +26,7 @@ export default {
     let echarts = inject("ec");
     let myChart;
     const options = {
-      color: ["rgb(224,101,36)"],
+      color: ["rgb(214,192,78)", "rgb(224,101,36)"],
       legend: {
         data: [props.name, "市场参与率(%)"],
         left: 0,
@@ -84,7 +84,16 @@ export default {
         splitLine: { show: false },
         splitArea: { show: false },
       },
-      yAxis: {},
+      yAxis: {
+        splitLine: {
+          lineStyle: {
+            // 使用深浅的间隔色
+            type: [2, 2],
+
+            dashOffset: 10,
+          },
+        },
+      },
       grid: {
         left: 0,
         right: 0,
@@ -96,8 +105,8 @@ export default {
           type: "line",
           smooth: true, // 平滑曲线
           data: [
-            10, 20, 30, 15, 8, 2, 4, 16, 31, 18, 1, 2, 3, 15, 8, 2, 4, 16, 31,
-            18, 1, 2, 3, 15, 8, 2, 4, 6, 1, 18,
+            10, 20, 30, 15, 8, 2, 4, 16, 31, 18, 6, 2, 3, 15, 8, 2, 4, 16, 31,
+            18, 6, 2, 3, 15, 8, 2, 4, 6, 10, 18,
           ],
           showSymbol: false, //  不让显示点
         },
@@ -113,9 +122,8 @@ export default {
           },
           barWidth: "5",
           data: [
-            1, 2, 3, 1.5, 0.8, 0.2, 0.4, 1.6, 3.1, 1.8, 0.1, 0.2, 0.3, 1.5, 0.8,
-            0.2, 0.4, 1.6, 3.1, 1.8, 0.1, 0.2, 0.3, 1.5, 0.8, 0.2, 0.4, 1.6,
-            3.1, 1.8,
+            5, 10, 15, 7.5, 4, 1, 2, 8, 15.5, 9, 3, 1, 1.5, 7.5, 4, 1, 2, 8,
+            15.5, 9, 3, 1, 1.5, 7.5, 4, 1, 2, 3, 5, 9,
           ],
         },
       ],

@@ -82,7 +82,14 @@ export default {
         splitLine: { show: false },
         splitArea: { show: false },
       },
-      yAxis: {},
+      yAxis: {
+        splitLine: {
+          lineStyle: {
+            // 使用深浅的间隔色
+            type: "dashed",
+          },
+        },
+      },
       grid: {
         left: 0,
         right: 0,
