@@ -42,13 +42,13 @@
         align="center"
       >
       </el-table-column>
-      <el-table-column prop="name" label="功能折线图" align="center">
+      <el-table-column prop="name" label="功耗详情" align="center">
         <template #default="scope">
           <span
             class="oper edit"
             style="margin-right: 0"
             @click="detail(scope.row)"
-            >详情</span
+            >查看</span
           >
         </template>
       </el-table-column>

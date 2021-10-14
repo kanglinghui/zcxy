@@ -4,6 +4,7 @@
       <el-table
         :data="tableData"
         stripe
+        class="log-table"
         style="width: 100%"
         height="calc(100vh - 157px)"
       >

@@ -36,8 +36,6 @@ import {
   ElAvatar,
   ElNotification,
   ElPagination,
-  ElCard,
-  ElLink,
   ElScrollbar,
 } from "element-plus";
 import "element-plus/lib/theme-chalk/index.css";
@@ -87,8 +85,6 @@ const components = [
   ElSelect,
   ElAvatar,
   ElPagination,
-  ElCard,
-  ElLink,
   ElScrollbar,
 ];
 app.component("card-box", card);

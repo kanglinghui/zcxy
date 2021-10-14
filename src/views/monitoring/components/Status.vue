@@ -41,19 +41,19 @@
       </el-table-column>
       <el-table-column prop="name" label="策略状态" width="80" align="center">
       </el-table-column>
-      <el-table-column prop="name" label="下单频率" width="70" align="center">
+      <el-table-column prop="name" label="盈亏分析" width="70" align="center">
         <template #default="scope">
           <span
             class="oper edit"
             style="margin-right: 0"
-            @click="detail(scope.row)"
-            >详情</span
+            @click="analyse(scope.row)"
+            >查看</span
           >
         </template>
       </el-table-column>
       <el-table-column prop="name" label="策略日志" width="95" align="center">
         <template #default="scope">
-          <span class="oper edit" @click="detail(scope.row)">详情</span>
+          <span class="oper edit" @click="logDetail(scope.row)">查看</span>
           <span class="oper freeze">导出</span>
         </template>
       </el-table-column>
@@ -76,16 +76,23 @@
 </template>
 <script>
 import { reactive, toRefs, onActivated } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const data = reactive({
-      tableData: [{ date: "09:00", name: "数据" }],
+      tableData: [{ date: "09:00", name: "数据", id: "1" }],
       input: "",
     });
     const detail = (row) => {
       console.log(row);
+    };
+    const analyse = (row) => {
+      router.push(`/analyse/:${row.id}`);
+    };
+    const logDetail = (row) => {
+      router.push(`/logDetail/:${row.id}`);
     };
     onActivated(() => {
       if (!route.query.type) {
@@ -95,6 +102,8 @@ export default {
     return {
       ...toRefs(data),
       detail,
+      logDetail, // 日志详情
+      analyse, // 盈亏分析
     };
   },
 };

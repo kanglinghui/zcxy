@@ -13,6 +13,7 @@ const moduleRoutes = modulesFiles.keys().reduce((moduleRoutes, modulePath) => {
   return [...moduleRoutes, ...value.default];
 }, []);
 const permissionsList = moduleRoutes.map((item) => item.name);
+permissionsList.push("logDetail");
 const routes = [
   {
     path: "/",
@@ -46,52 +47,12 @@ const routes = [
         component: () => import("../views/institutions"),
       },
       ...moduleRoutes,
-      //   {
-      //     path: "/institutionsEdit",
-      //     name: "InstitutionsEdit",
-      //     meta: {
-      //       title: "机构管理 - 编辑",
-      //     },
-      //     component: () => import("../views/institutions/detail.vue"),
-      //   },
-      //   {
-      //     path: "monitoring",
-      //     name: "Monitoring",
-      //     meta: {
-      //       title: "监控",
-      //     },
-      //     component: () => import("../views/monitoring"),
-      //   },
-      //   {
-      //     path: "log",
-      //     name: "Log",
-      //     meta: {
-      //       title: "操作日志",
-      //     },
-      //     component: () => import("../views/log"),
-      //   },
     ],
   },
   {
     path: "/",
     redirect: "/i/admin",
   },
-  //   {
-  //     path: "/admin",
-  //     name: "Admin",
-  //     meta: {
-  //       title: "管理员",
-  //     },
-  //     component: () => import(/* webpackChunkName: "about" */ "../views/admin"),
-  //   },
-  //   {
-  //     path: "/institutions",
-  //     name: "Institutions",
-  //     meta: {
-  //       title: "机构管理",
-  //     },
-  //     component: () => import("../views/institutions"),
-  //   },
   {
     path: "/institutionsEdit/:id",
     name: "InstitutionsEdit",
@@ -100,6 +61,17 @@ const routes = [
     },
     component: () => import("../views/institutions/detail.vue"),
   },
+  {
+    path: "/logDetail/:id",
+    name: "logDetail",
+    component: () => import("@/views/monitoring/components/logDetail.vue"),
+  },
+  {
+    path: "/analyse/:id",
+    name: "Analyse",
+    component: () => import("@/views/monitoring/components/Analyse.vue"),
+  },
+
   {
     path: "/401",
     name: "NoPermission",

@@ -1,9 +1,5 @@
 <template>
   <div class="institutions-detail">
-    <!-- <div class="header">
-      <div class="back" @click="back">返 回</div>
-      <h3>当前机构: {{ title }}</h3>
-    </div> -->
     <DetailHeader @back="back">
       <h3>当前机构: {{ title }}</h3>
     </DetailHeader>
