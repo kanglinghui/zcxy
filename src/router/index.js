@@ -13,7 +13,8 @@ const moduleRoutes = modulesFiles.keys().reduce((moduleRoutes, modulePath) => {
   return [...moduleRoutes, ...value.default];
 }, []);
 const permissionsList = moduleRoutes.map((item) => item.name);
-permissionsList.push("logDetail");
+let permissionsArray = ["logDetail", "Analyse"];
+permissionsList.push(...permissionsArray);
 const routes = [
   {
     path: "/",
