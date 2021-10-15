@@ -13,7 +13,7 @@ const moduleRoutes = modulesFiles.keys().reduce((moduleRoutes, modulePath) => {
   return [...moduleRoutes, ...value.default];
 }, []);
 const permissionsList = moduleRoutes.map((item) => item.name);
-let permissionsArray = ["logDetail", "Analyse"];
+let permissionsArray = ["logDetail", "Analyse", "Power"];
 permissionsList.push(...permissionsArray);
 const routes = [
   {
@@ -71,6 +71,11 @@ const routes = [
     path: "/analyse/:id",
     name: "Analyse",
     component: () => import("@/views/monitoring/components/Analyse.vue"),
+  },
+  {
+    path: "/power/:id",
+    name: "Power",
+    component: () => import("@/views/monitoring/components/Power_c.vue"),
   },
 
   {

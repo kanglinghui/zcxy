@@ -364,6 +364,12 @@ th {
     color: var(--color-theme);
     font-weight: 700;
 }
+.el-switch__label.is-active {
+    color: #303133 !important;
+}
+.el-switch__label {
+    color: rgb(132, 128, 124) !important;
+}
 .log-table {
     border-left: 1px solid #ebeef5;
     border-right: 1px solid #ebeef5;

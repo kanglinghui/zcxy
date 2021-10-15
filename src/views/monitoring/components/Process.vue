@@ -71,12 +71,12 @@ export default {
   setup() {
     const router = useRouter();
     const data = reactive({
-      tableData: [{ name: "数据" }],
+      tableData: [{ name: "数据", id: 1 }],
     });
     const detail = (row) => {
       //   console.log(getCurrentInstance().parent.props); //父组件的一些数据
       console.log(row);
-      router.push("/about");
+      router.push(`/power/:${row.id}`);
     };
     // onActivated(() => {
     //   console.log(getCurrentInstance().parent.props.label, "上下文");

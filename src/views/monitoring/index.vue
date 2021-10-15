@@ -42,7 +42,9 @@ export default {
       ],
     });
     onActivated(() => {
-      if (!route.query.type) {
+      if (route.query.type === "process") {
+        data.activeLabel = "进程监控";
+      } else {
         data.activeLabel = "策略状态";
       }
     });
