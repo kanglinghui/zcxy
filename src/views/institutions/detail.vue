@@ -121,7 +121,12 @@
       :showType="type"
       :isAdmin="isAdmin"
     />
-    <RiskPermUI v-model:dialog="riskPerm" :title="permTitle" :showType="type" />
+    <RiskPermUI
+      v-model:dialog="riskPerm"
+      :title="permTitle"
+      :showType="type"
+      :isAdmin="isAdmin"
+    />
     <TradingPermUI
       v-model:dialog="tradingPerm"
       :title="permTitle"
